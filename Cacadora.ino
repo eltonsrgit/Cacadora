@@ -18,7 +18,7 @@ const int motor_dir_2 = 23;  //14 vespa
 DRV8833 motor(motor_esq_1, motor_esq_2, motor_dir_1, motor_dir_2);
 
 
-#include "Hunting.h"  // Função de busca e destruição >:DDDDDD
+#include "Hunting.h"
 #include "RCDualShock.h"
 
 SumoIR IR;
@@ -95,20 +95,19 @@ void loop(){
 
     } else if (IR.start()) {
       Serial.println("-> sumo start");
+
+      
     } else if (IR.on()) {
       pixels.clear();
       ledPatrol(150, 0, 0, 0, 0, 150, 70);
       Serial.println("-> sumo on");
-      Hunt();
-      
+      Hunt(); // Função de busca e destruição >:DDDDDD
       
 
     } else if (IR.stop()) {
       pixels.clear();
       motor.stop();
-
       Serial.println("-> sumo stop");
-
       ledLight(150, 0, 0);
 
     } else /* if (!IR.prepare() && !IR.start() && !IR.on() && !IR.stop()) */ {
