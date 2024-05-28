@@ -25,7 +25,7 @@ void Hunt(){  // maquina de estados
   switch (EstadoAtual){
     case 1:
       Serial.println("Searching Enemy...");
-      motor.move(1023, 0);
+      motor.move(1023, -1023);
       break;
 
     case 2:
@@ -40,15 +40,8 @@ void Hunt(){  // maquina de estados
 
     case 4:
       Serial.println("Right Detected!");
-      motor.move(1023, 1023);
-      break;
-
-    /*case 5:
-      motor.move(-1023, -1023);
-      delay(200);
-      motor.move(-1023, 0);
-      delay(300);*/ 
-       
+      motor.move(1023, 900);
+      break;       
   }
 }
 
