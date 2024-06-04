@@ -2,6 +2,7 @@
 #define ledFX_H 
 
 #include <Adafruit_NeoPixel.h>
+#include <avr/power.h>
 
 #define PIN 2 // pino do anel de leds
 #define NUMPIXELS 8 // quantidade de leds do anel
