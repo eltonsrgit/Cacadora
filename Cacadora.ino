@@ -37,6 +37,13 @@ void setup(){
   pinMode(sensorReflex, INPUT);
   pinMode(leftIRpin, INPUT);
   pinMode(rightIRpin, INPUT);
+  #if defined (__AVR_ATtiny85__)
+    if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
+  #endif
+  strip.begin();
+  strip.setBrightness(50);
+  strip.show(); // Initialize all pixels to 'off'
+  
   pixels.begin();
   pixels.setBrightness(80);
   pixels.clear();
@@ -90,7 +97,7 @@ void loop(){
     if (IR.prepare()) {
 
       motor.stop();
-      ledBlink(100, 0, 200, 65);
+      rainbowCycle(5);
       Serial.println("-> sumo prepare");
 
     } else if (IR.start()) {
@@ -108,7 +115,7 @@ void loop(){
       pixels.clear();
       motor.stop();
       Serial.println("-> sumo stop");
-      ledLight(150, 0, 0);
+      rainbow(10);
 
     } else /* if (!IR.prepare() && !IR.start() && !IR.on() && !IR.stop()) */ {
       /* Código quando o robô está desligado */
