@@ -97,7 +97,7 @@ void loop(){
     if (IR.prepare()) {
 
       motor.stop();
-      rainbowCycle(5);
+      ledBLink(150, 150, 0);
       Serial.println("-> sumo prepare");
 
     } else if (IR.start()) {
@@ -106,7 +106,7 @@ void loop(){
       
     } else if (IR.on()) {
       pixels.clear();
-      ledPatrol(150, 0, 0, 0, 0, 150, 70);
+      ledLight(120, 0, 150);
       Serial.println("-> sumo on");
       Hunt(); // Função de busca e destruição >:DDDDDD
       
@@ -115,13 +115,13 @@ void loop(){
       pixels.clear();
       motor.stop();
       Serial.println("-> sumo stop");
-      rainbow(10);
+      rainbowCycle(4);
 
-    } else /* if (!IR.prepare() && !IR.start() && !IR.on() && !IR.stop()) */ {
+    } else  {
       /* Código quando o robô está desligado */
       pixels.clear();
       motor.stop();
-      ledLight(150, 0, 0);
+      rainbowCycle(4);
     }
   }
 }
