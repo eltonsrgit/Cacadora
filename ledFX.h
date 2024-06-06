@@ -8,7 +8,7 @@
 #define NUMPIXELS 8 // quantidade de leds do anel
 
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800); // necessário
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
 
 void ledBlink(uint8_t r, uint8_t g, uint8_t b, int time) { // pisca todas os leds em um intervalo de tempo
   pixels.clear();
@@ -143,6 +143,28 @@ void theaterChase(uint32_t c, uint8_t wait) {
       for (uint16_t i=0; i < strip.numPixels(); i=i+3) {
         strip.setPixelColor(i+q, 0);        //turn every third pixel off
       }
+    }
+  }
+}
+
+
+void theaterChaseRainbow(int wait) {
+  int firstPixelHue = 0;     // First pixel starts at red (hue 0)
+  for(int a=0; a<30; a++) {  // Repeat 30 times...
+    for(int b=0; b<3; b++) { //  'b' counts from 0 to 2...
+      strip.clear();         //   Set all pixels in RAM to 0 (off)
+      // 'c' counts up from 'b' to end of strip in increments of 3...
+      for(int c=b; c<strip.numPixels(); c += 3) {
+        // hue of pixel 'c' is offset by an amount to make one full
+        // revolution of the color wheel (range 65536) along the length
+        // of the strip (strip.numPixels() steps):
+        int      hue   = firstPixelHue + c * 65536L / strip.numPixels();
+        uint32_t color = strip.gamma32(strip.ColorHSV(hue)); // hue -> RGB
+        strip.setPixelColor(c, color); // Set pixel 'c' to value 'color'
+      }
+      strip.show();                // Update strip with new contents
+      delay(wait);                 // Pause for a moment
+      firstPixelHue += 65536 / 90; // One cycle of color wheel over 90 frames
     }
   }
 }
