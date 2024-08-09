@@ -6,7 +6,7 @@
 #include "ledFX.h"  
 
 
-#define sensorReflex 14
+#define sensorReflex 15
 #define boot 0
 
 const int motor_esq_1 = 18;   //4 vespa
@@ -31,12 +31,13 @@ void setup(){
   pinMode(boot, INPUT_PULLUP);
   Serial.begin(115200);
   IR.begin(15);
-  PS4.begin("60:5b:b4:7e:74:a4");  // mac do meu ps4 "60:5b:b4:7e:74:a4"
+  PS4.begin("60:5b:b4:7e:74:a4");  // mac do meu ps4 "60:5b:b4:7e:74:a4" #### mac do pc "9c:30:5b:fb:f4:58"
   motor.begin();
   motor.bip(3, 200, 2280);
   pinMode(sensorReflex, INPUT);
   pinMode(leftIRpin, INPUT);
   pinMode(rightIRpin, INPUT);
+
   #if defined (__AVR_ATtiny85__)
     if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
   #endif
@@ -97,7 +98,7 @@ void loop(){
     if (IR.prepare()) {
 
       motor.stop();
-      ledBLink(150, 150, 0);
+      ledCircle(100, 0, 200, 70);
       Serial.println("-> sumo prepare");
 
     } else if (IR.start()) {
@@ -106,7 +107,7 @@ void loop(){
       
     } else if (IR.on()) {
       pixels.clear();
-      ledLight(120, 0, 150);
+      ledLight(150, 0, 0);
       Serial.println("-> sumo on");
       Hunt(); // Função de busca e destruição >:DDDDDD
       
@@ -115,13 +116,14 @@ void loop(){
       pixels.clear();
       motor.stop();
       Serial.println("-> sumo stop");
-      rainbowCycle(4);
+      ledLight(150, 0, 0);
 
     } else  {
       /* Código quando o robô está desligado */
       pixels.clear();
       motor.stop();
-      rainbowCycle(4);
+      ledLight(100, 0, 200);
+      
     }
   }
 }
