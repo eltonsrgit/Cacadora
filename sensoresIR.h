@@ -7,7 +7,7 @@
 
 bool LeftDetection(){
   bool left_IR_read = digitalRead(leftIRpin);
-  if (left_IR_read == 0){
+  if (left_IR_read == 1){
     return false; // sem inimigo
   }
   else{
@@ -17,7 +17,7 @@ bool LeftDetection(){
 
 bool RightDetection(){
   bool right_IR_read = digitalRead(rightIRpin);
-  if (right_IR_read == 0){
+  if (right_IR_read == 1){
     return false; // sem inimigo
   }
   else{

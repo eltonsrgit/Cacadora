@@ -25,12 +25,12 @@ void Hunt(){  // maquina de estados
   switch (EstadoAtual){
     case 1:
       Serial.println("Searching Enemy...");
-      motor.move(0,0);
+      motor.move(900,-900);
       break;
 
     case 2:
       Serial.println("ROBOT ATTACK!");
-      motor.stop();
+      motor.move(1023, 1023);
       break;
 
     case 3:

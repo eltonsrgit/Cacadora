@@ -6,7 +6,6 @@
 #include "ledFX.h"  
 
 
-#define sensorReflex 15
 #define boot 0
 
 const int motor_esq_1 = 18;   //4 vespa
@@ -30,11 +29,10 @@ bool botaoPressionado = false;       // indica se o botão foi pressionado
 void setup(){
   pinMode(boot, INPUT_PULLUP);
   Serial.begin(115200);
-  IR.begin(15);
+  IR.begin(14);
   PS4.begin("60:5b:b4:7e:74:a4");  // mac do meu ps4 "60:5b:b4:7e:74:a4" #### mac do pc "9c:30:5b:fb:f4:58"
   motor.begin();
-  motor.bip(3, 200, 2280);
-  pinMode(sensorReflex, INPUT);
+  motor.bip(3, 200, 2000);
   pinMode(leftIRpin, INPUT);
   pinMode(rightIRpin, INPUT);
 
@@ -90,7 +88,7 @@ void loop(){
   } else if (modoAutonomo) {
     // Código autônomo
     RC = false;
-    PS4.setLed(255, 0, 0);   // seta a cor do led do controle
+    PS4.setLed(255, 255, 255);   // seta a cor do led do controle
     PS4.sendToController();  // necessário para enviar o comando acima para o controle
 
     IR.update();
@@ -98,7 +96,7 @@ void loop(){
     if (IR.prepare()) {
 
       motor.stop();
-      ledCircle(100, 0, 200, 70);
+      ledLight(100, 100, 100);
       Serial.println("-> sumo prepare");
 
     } else if (IR.start()) {
@@ -107,7 +105,7 @@ void loop(){
       
     } else if (IR.on()) {
       pixels.clear();
-      ledLight(150, 0, 0);
+      ledLight(150, 0, 200);
       Serial.println("-> sumo on");
       Hunt(); // Função de busca e destruição >:DDDDDD
       
@@ -116,13 +114,13 @@ void loop(){
       pixels.clear();
       motor.stop();
       Serial.println("-> sumo stop");
-      ledLight(150, 0, 0);
+      ledLight(80, 200, 0);
 
     } else  {
       /* Código quando o robô está desligado */
       pixels.clear();
       motor.stop();
-      ledLight(100, 0, 200);
+      ledLight(200, 0, 0);
       
     }
   }
