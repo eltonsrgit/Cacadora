@@ -1,2 +1,2 @@
 # Ultima atualização:
-Domingo, 11 de Agosto de 2024. Para a competição de robótica da Rio Innovation Week.
+Segunda, 19 de Agosto de 2024. Depois da competição de robótica da Rio Innovation Week.
