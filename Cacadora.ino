@@ -17,7 +17,7 @@ const int motor_dir_2 = 23;  //14 vespa
 DRV8833 motor(motor_esq_1, motor_esq_2, motor_dir_1, motor_dir_2);
 
 
-#include "Hunting.h"
+#include "TornadoOfSouls.h"
 #include "RCDualShock.h"
 
 SumoIR IR;
@@ -107,7 +107,7 @@ void loop(){
       pixels.clear();
       ledLight(150, 0, 200);
       Serial.println("-> sumo on");
-      Hunt(); // Função de busca e destruição >:DDDDDD
+      TornadoOfSouls(); // Caçadora gira em torno de si mesma até encontrar seu oponente e vai pra cima até vencer o combate
       
 
     } else if (IR.stop()) {
