@@ -1,5 +1,5 @@
-#ifndef Hunting_H
-#define Hunting_H
+#ifndef TornadoOfSouls_H
+#define TornadoOfSouls_H
 
 
 int EstadoAtual;
@@ -20,7 +20,7 @@ void EstadoUpdate(){  // função que atualiza os estados
   }
 }
 
-void Hunt(){  // maquina de estados
+void TornadoOfSouls(){  // maquina de estados
   EstadoUpdate(); // função atualiza o estado a todo momento
   switch (EstadoAtual){
     case 1:
