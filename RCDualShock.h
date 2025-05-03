@@ -46,9 +46,9 @@ if (!PS4.isConnected()) {
     while (PS4.Triangle()){
       motor.move(1023, -1023);
     }
-    while (PS4.Cross()){
-      Hunt();
-    }
+    // while (PS4.Cross()){
+    //   Hunt();
+    // }
 
     motor.move(vel_esq, vel_dir);
     

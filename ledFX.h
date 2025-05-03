@@ -1,11 +1,14 @@
 #ifndef ledFX_H
 #define ledFX_H 
-
+#include "sensoresIR.h"
 #include <Adafruit_NeoPixel.h>
-
+#include "WildSide.h"
 #define PIN 2 // pino do anel de leds
 #define NUMPIXELS 8 // quantidade de leds do anel
-
+#define LED3 3
+#define LED4 4
+#define LED7 7
+#define LED1 0
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800); // necessário
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -168,5 +171,45 @@ void theaterChaseRainbow(int wait) {
       firstPixelHue += 65536 / 90; // One cycle of color wheel over 90 frames
     }
   }
+}
+
+
+void setDefaultColor(uint8_t r, uint8_t g, uint8_t b) {
+    for (uint8_t i = 0; i < NUMPIXELS; i++) {
+      pixels.setPixelColor(i, pixels.Color(r, g, b));
+    }
+  }
+
+void ledDetection() {
+
+  
+  
+  setDefaultColor(150, 0, 0); // Define a cor padrão azul para todos os LEDs
+  
+  if (LeftDetection()) {
+    Serial.println("ESQUERDA FRONTAL DETECTADO");
+    pixels.setPixelColor(LED4, pixels.Color(0, 150, 0)); // Acende o LED 4 em vermelho
+
+    } if (RightDetection()) {
+    Serial.println("DIREITA FRONTAL DETECTADO");
+    pixels.setPixelColor(LED3, pixels.Color(0, 150, 0)); // Acende o LED 5 em vermelho
+    }
+    lerSensores();
+    if (leftRay == 1) {
+    Serial.println("ESQUERDA LATERAL DETECTADO");
+    pixels.setPixelColor(LED7, pixels.Color(0, 0, 150)); // Acende o LED 5 em vermelho
+
+    }
+    if (rightRay == 1) {
+    Serial.println("DIREITA LATERAL DETECTADO");
+    pixels.setPixelColor(LED1, pixels.Color(0, 0, 150)); // Acende o LED 5 em vermelho
+    }
+
+   else {
+    Serial.println("PROCURANDO OBJETO");
+  }
+  
+  pixels.show();
+  delay(10);
 }
 #endif

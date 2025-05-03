@@ -1,20 +1,14 @@
 #include <PS4Controller.h>  
-#include <WiFi.h> 
 #include "SumoIR.h"
 #include "DRV8833.h"
 #include "sensoresIR.h"
 #include "ledFX.h"  
-
-
+#include "WildSide.h"
 #define boot 0
 
-const int motor_esq_1 = 18;   //4 vespa
-const int motor_esq_2 = 19;  //27 vespa
-const int motor_dir_1 = 4;  //13 vespa
-const int motor_dir_2 = 23;  //14 vespa
 
 
-DRV8833 motor(motor_esq_1, motor_esq_2, motor_dir_1, motor_dir_2);
+// DRV8833 motor(motor_esq_1, motor_esq_2, motor_dir_1, motor_dir_2);
 
 
 #include "TornadoOfSouls.h"
@@ -29,8 +23,8 @@ bool botaoPressionado = false;       // indica se o botão foi pressionado
 void setup(){
   pinMode(boot, INPUT_PULLUP);
   Serial.begin(115200);
-  IR.begin(14);
-  PS4.begin("60:5b:b4:7e:74:a4");  // mac do meu ps4 "60:5b:b4:7e:74:a4" #### mac do pc "9c:30:5b:fb:f4:58"
+  IR.begin(15);
+  PS4.begin("9c:30:5b:fb:f4:58");  // mac do meu ps4 "60:5b:b4:7e:74:a4" #### mac do pc "9c:30:5b:fb:f4:58"
   motor.begin();
   motor.bip(3, 200, 2000);
   pinMode(leftIRpin, INPUT);
@@ -107,20 +101,21 @@ void loop(){
       pixels.clear();
       ledLight(150, 0, 200);
       Serial.println("-> sumo on");
-      TornadoOfSouls(); // Caçadora gira em torno de si mesma até encontrar seu oponente e vai pra cima até vencer o combate
+      WildSide();
+      //TornadoOfSouls(); // Caçadora gira em torno de si mesma até encontrar seu oponente e vai pra cima até vencer o combate
       
 
     } else if (IR.stop()) {
       pixels.clear();
       motor.stop();
       Serial.println("-> sumo stop");
-      ledLight(80, 200, 0);
+      ledDetection();
 
     } else  {
       /* Código quando o robô está desligado */
       pixels.clear();
       motor.stop();
-      ledLight(200, 0, 0);
+      ledDetection();
       
     }
   }
