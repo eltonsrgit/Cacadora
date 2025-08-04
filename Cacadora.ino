@@ -6,6 +6,7 @@
 #include "WildSide.h"
 #define boot 0
 
+int strategy = 0; // estrategia
 
 
 // DRV8833 motor(motor_esq_1, motor_esq_2, motor_dir_1, motor_dir_2);
@@ -87,6 +88,15 @@ void loop(){
 
     IR.update();
 
+    // if( IR.available() ){
+    //   int cmd = IR.read();
+    //   if( cmd >= 4 && cmd <= 9 ){ // faixa de valores validos ( lembrando que 1, 2 e 3 são eservados pra start, stop e prepare)
+    //     strategy = cmd;
+    //     ledLight(200, 100, 100);
+    //   }
+    // }
+
+
     if (IR.prepare()) {
 
       motor.stop();
@@ -99,10 +109,30 @@ void loop(){
       
     } else if (IR.on()) {
       pixels.clear();
-      ledLight(150, 0, 200);
-      Serial.println("-> sumo on");
-      WildSide();
-      //TornadoOfSouls(); // Caçadora gira em torno de si mesma até encontrar seu oponente e vai pra cima até vencer o combate
+      ledLight(0, 150, 0);
+
+      switch (strategy){
+        case 4:
+          TornadoOfSouls_L();
+        break;
+
+        case 5:
+          TornadoOfSouls_R();
+        break;
+
+        case 6:
+          WildSide();
+        break;
+
+        case 7:
+          motor.move(-1023, -1023);
+        break;
+
+        default:
+        motor.stop();
+        break;
+        // ... outras estratégias
+      }
       
 
     } else if (IR.stop()) {
@@ -112,11 +142,98 @@ void loop(){
       ledDetection();
 
     } else  {
-      /* Código quando o robô está desligado */
-      pixels.clear();
-      motor.stop();
+      strategyLED(); // vermelho para estratégia 4, branco para 5 e azul para 6
+      
       ledDetection();
       
     }
   }
+}
+
+void strategyLED(){
+  int cmd = IR.read();
+  if (cmd >= 4 && cmd <= 9) { // faixa de valores validos ( 1, 2 e 3 são reservados pra prepare, start e stop)
+    strategy = cmd;
+  } else return;
+
+  if (cmd <= 8) {
+    const int num_leds = cmd % 8;
+    for(uint8_t i = 0; i < num_leds; i++) {
+      switch ((cmd-3) % 5) { // Acende o LED de 0 ao número comando numa cor +- diferente cada número
+        case 0: pixels.setPixelColor(i, pixels.Color(150, 0,   0  )); break;
+        case 1: pixels.setPixelColor(i, pixels.Color(150, 150, 150)); break;
+        case 2: pixels.setPixelColor(i, pixels.Color(0,   0,   150)); break;
+        case 3: pixels.setPixelColor(i, pixels.Color(255, 150, 0  )); break;
+        case 4: pixels.setPixelColor(i, pixels.Color(0,   150, 255)); break;
+      } pixels.show();
+    }
+    delay(80);
+    for(uint8_t i = 0; i < num_leds; i++) { 
+      pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Desliga os LEDs
+      pixels.show();
+    }
+    delay(80);
+  }
+  // if (cmd == 4) {
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(150, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();      
+  //   }
+  //   delay(80);
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();          
+  //   }
+  //   delay(80);
+  // }
+  // if (cmd == 5) {
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(150, 150, 150)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();    
+  //   }
+  //   delay(80);
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();          
+  //   }
+  //   delay(80);
+  // }
+
+  // if (cmd == 6) {
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 150)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();    
+  //   }
+  //    delay(80);
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();          
+  //   }
+  //   delay(80);
+  // }
+
+  // if (cmd == 7) {
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(255, 150, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();    
+  //   }
+  //    delay(80);
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();          
+  //   }
+  //   delay(80);
+  // }
+  // if (cmd == 8) {
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(150, 150, 150)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();    
+  //   }
+  //    delay(80);
+  //   for(uint8_t i = 0; i < cmd; i++) { 
+  //     pixels.setPixelColor(i, pixels.Color(0, 0, 0)); // Acende o LED de 1 a 4 em vermelho
+  //     pixels.show();          
+  //   }
+  //   delay(80);
+  // }
 }
